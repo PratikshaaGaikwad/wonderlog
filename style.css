@@ -15,8 +15,8 @@ body {
     color: #233142;
     line-height: 1.6;
     min-height: 100vh;
-    display: flex;              /* NEW: stack children top to bottom */
-    flex-direction: column;     /* NEW: direction of stacking */
+    display: flex;              
+    flex-direction: column;    
 }
 /* Headings */
 h1,
