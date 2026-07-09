@@ -32,11 +32,49 @@
       </p>
       <a href="#" class="cta">Start Your Journey →</a>
     </section>
+    <section class="add-trip" id="add-trip">
+  <h2>Add a New Trip</h2>
+  <form id="trip-form">
+    <div class="form-group">
+      <label for="title">Trip Title</label>
+      <input type="text" id="title" name="title" required />
+    </div>
+
+    <div class="form-group">
+      <label for="destination">Destination</label>
+      <input type="text" id="destination" name="destination" required />
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required />
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="coverImage">Cover Image URL</label>
+      <input type="url" id="coverImage" name="coverImage" placeholder="https://..." />
+    </div>
+
+    <button type="submit" class="cta">Add Trip</button>
+  </form>
+</section>
+
+<section class="trips-list">
+  <h2>Your Trips ✈️</h2>
+  <div id="trips-container">
+    <!-- Trip cards will be inserted here by js -->
+  </div>
+</section>
   </main>
 
   <footer>
     <p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p>
   </footer>
-
+<script src="script.js"> </script>
 </body>
 </html>
