@@ -65,6 +65,9 @@ function saveTrips() {
 
 function renderTrips() {
   tripsContainer.innerHTML = ''; // clear current cards before re-drawing
+  
+   const tripsHeading = document.getElementById('trips-heading');
+  tripsHeading.textContent = `My Trips ✈️ (${trips.length}) `;
 
   if (trips.length === 0) {
     tripsContainer.innerHTML = '<p class="empty-state">🗺️ Your journal is empty — add your first trip above to get started!</p>';
@@ -78,8 +81,8 @@ function renderTrips() {
     card.innerHTML = `
   ${trip.coverImage ? `<img src="${trip.coverImage}" alt="${trip.title}" />` : ''}
   <h3>${trip.title}</h3>
-  <p class="trip-destination">${trip.destination}</p>
-  <p class="trip-date">${trip.date}</p>
+  <p class="trip-destination">📍${trip.destination}</p>
+  <p class="trip-date">📅 ${formatDate(trip.date)}</p>
   <p class="trip-notes">${trip.notes}</p>
   <div class="card-actions">
     <button class="edit-btn" data-id="${trip.id}">Edit</button>
@@ -89,6 +92,15 @@ function renderTrips() {
 
     tripsContainer.appendChild(card);
   });
+}
+function formatDate(dateString) {
+  const options = {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  };
+
+  return new Date(dateString).toLocaleDateString("en-GB", options);
 }
 tripsContainer.addEventListener('click', function (e) {
   if (e.target.classList.contains('delete-btn')) {
@@ -132,5 +144,6 @@ function showToast(message) {
     toast.classList.remove('show');
   }, 2500);
 }
+
 
 renderTrips(); 
