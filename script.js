@@ -26,22 +26,36 @@ form.addEventListener('submit', function (e) {
     return;
   }
 
-  const newTrip = {
-    id: Date.now(),
-    title,
-    destination,
-    date,
-    notes,
-    coverImage
-  };
+  const editingId = form.dataset.editingId;
 
-  trips.push(newTrip);       // add new trip to the array
-  saveTrips();                // save updated array to localStorage
-  renderTrips();               // re-draw all trip cards on the page
+  if (editingId) {
+    // UPDATE existing trip
+    const trip = trips.find(t => t.id === Number(editingId));
+    trip.title = title;
+    trip.destination = destination;
+    trip.date = date;
+    trip.notes = notes;
+    trip.coverImage = coverImage;
 
+    delete form.dataset.editingId; // clear edit mode
+  } else {
+    // CREATE new trip
+    const newTrip = {
+      id: Date.now(),
+      title,
+      destination,
+      date,
+      notes,
+      coverImage
+    };
+    trips.push(newTrip);
+  }
+
+  saveTrips();
+  renderTrips();
   form.reset();
 });
-
+ 
 function saveTrips() {
   localStorage.setItem('trips', JSON.stringify(trips));
 }
@@ -59,15 +73,50 @@ function renderTrips() {
     card.classList.add('trip-card');
 
     card.innerHTML = `
-      ${trip.coverImage ? `<img src="${trip.coverImage}" alt="${trip.title}" />` : ''}
-      <h3>${trip.title}</h3>
-      <p class="trip-destination">${trip.destination}</p>
-      <p class="trip-date">${trip.date}</p>
-      <p class="trip-notes">${trip.notes}</p>
-    `;
+  ${trip.coverImage ? `<img src="${trip.coverImage}" alt="${trip.title}" />` : ''}
+  <h3>${trip.title}</h3>
+  <p class="trip-destination">${trip.destination}</p>
+  <p class="trip-date">${trip.date}</p>
+  <p class="trip-notes">${trip.notes}</p>
+  <div class="card-actions">
+    <button class="edit-btn" data-id="${trip.id}">Edit</button>
+    <button class="delete-btn" data-id="${trip.id}">Delete</button>
+  </div>
+`;
 
     tripsContainer.appendChild(card);
   });
 }
+tripsContainer.addEventListener('click', function (e) {
+  if (e.target.classList.contains('delete-btn')) {
+    const id = Number(e.target.dataset.id);
+    const confirmDelete = confirm('Delete this trip permanently? This action cannot be undone.');
+
+    if (confirmDelete) {
+      trips = trips.filter(trip => trip.id !== id);
+      saveTrips();
+      renderTrips();
+    }
+  }
+
+  if (e.target.classList.contains('edit-btn')) {
+    const id = Number(e.target.dataset.id);
+    const trip = trips.find(t => t.id === id);
+
+    // Pre-fill the form with this trip's existing data
+    document.getElementById('title').value = trip.title;
+    document.getElementById('destination').value = trip.destination;
+    document.getElementById('date').value = trip.date;
+    document.getElementById('notes').value = trip.notes;
+    document.getElementById('coverImage').value = trip.coverImage;
+
+    // Remember which trip we're editing
+    form.dataset.editingId = id;
+
+    // Show the form and scroll to it
+    addTripSection.classList.add('visible');
+    addTripSection.scrollIntoView({ behavior: 'smooth' });
+  }
+});
 
 renderTrips(); 
