@@ -38,8 +38,9 @@ form.addEventListener('submit', function (e) {
     trip.coverImage = coverImage;
 
     delete form.dataset.editingId; // clear edit mode
+    showToast('✏️ Trip updated.'); 
   } else {
-    // CREATE new trip
+    
     const newTrip = {
       id: Date.now(),
       title,
@@ -49,7 +50,9 @@ form.addEventListener('submit', function (e) {
       coverImage
     };
     trips.push(newTrip);
+    showToast('✅Trip added successfully!');
   }
+  document.getElementById('submit-btn').textContent = 'Add Trip'; // Reset button text after editing
 
   saveTrips();
   renderTrips();
@@ -96,6 +99,7 @@ tripsContainer.addEventListener('click', function (e) {
       trips = trips.filter(trip => trip.id !== id);
       saveTrips();
       renderTrips();
+      showToast('🗑 Trip removed.'); 
     }
   }
 
@@ -112,11 +116,21 @@ tripsContainer.addEventListener('click', function (e) {
 
     // Remember which trip we're editing
     form.dataset.editingId = id;
+    document.getElementById('submit-btn').textContent = 'Update Trip';
 
     // Show the form and scroll to it
     addTripSection.classList.add('visible');
     addTripSection.scrollIntoView({ behavior: 'smooth' });
   }
 });
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
 
 renderTrips(); 
