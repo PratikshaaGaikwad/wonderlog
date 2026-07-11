@@ -36,19 +36,25 @@ Revisit your adventures and memories.
 </p>
 </section>
 <section class="journal-section">
-<h2>Journal Entries</h2>
-<input
-type="text"
-id="searchInput"
-placeholder="Search destinations..."
->
-<div id="trips-container">
-</div>
+  <h2 id="trips-heading">Journal Entries ✈️ (0)</h2>
+
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="🔍 Search destinations..." />
+    <select id="sortSelect">
+      <option value="date-desc">Newest First</option>
+      <option value="date-asc">Oldest First</option>
+      <option value="title-asc">Title (A–Z)</option>
+      <option value="title-desc">Title (Z–A)</option>
+    </select>
+  </div>
+
+  <div id="trips-container"></div>
 </section>
 </main>
 <footer>
 <p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p>
 </footer>
+<div id="toast" class="toast"></div>
 <script src="script.js"></script>
 </body>
 </html>

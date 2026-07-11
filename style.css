@@ -252,7 +252,45 @@ transform:scale(1.08);
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+.toolbar {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
 
+.toolbar input,
+.toolbar select {
+  padding: 10px 14px;
+  border: 1px solid #DDE8E1;
+  border-radius: 8px;
+  font-family: "Work Sans", sans-serif;
+  font-size: 14px;
+}
+
+.toolbar input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.toolbar select {
+  cursor: pointer;
+}
+
+.small-hero {
+  margin-bottom: 20px !important;
+}
+
+.journal-section {
+  max-width: 900px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+}
+
+.journal-section h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
 /* Footer */
 footer {
     text-align: center;
