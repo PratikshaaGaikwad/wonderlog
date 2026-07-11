@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,17 +6,17 @@
 }
 body {
     font-family: "Work Sans", sans-serif;
-    background: linear-gradient(
-        135deg,
-        #F8FBF8 0%,
-        #F4FBFF 55%,
-        #EEF8F3 100%
-    );
+     background-color: #F8FBF8;
+    background-image:
+        radial-gradient(circle, rgba(35, 49, 66, 0.05) 1px, transparent 1px),
+        linear-gradient(135deg, #F8FBF8 0%, #F4FBFF 55%, #EEF8F3 100%);
+    background-size: 24px 24px, cover;
+    background-attachment: fixed;
     color: #233142;
     line-height: 1.6;
     min-height: 100vh;
-    display: flex;              
-    flex-direction: column;    
+    display: flex;
+    flex-direction: column;   
 }
 /* Headings */
 h1,
@@ -92,6 +92,10 @@ nav a:hover {
     font-size: 18px;
     color: #52616B;
     margin-bottom: 30px;
+     transition: color 0.3s ease;
+}
+.hero:hover p {
+  color: #2a8853;
 }
 /* Button */
 .cta {
@@ -188,7 +192,11 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 transform:translateY(-8px);
 box-shadow:0 20px 45px rgba(0,0,0,.15);
 }
-
+.trip-card:hover .trip-destination,
+.trip-card:hover .trip-date {
+  color: #8d1111;
+  transition: color 0.3s ease;
+}
 .trip-card img {
   width: 100%;
   height: 150px;
@@ -290,6 +298,27 @@ transform:scale(1.08);
 .journal-section h2 {
   text-align: center;
   margin-bottom: 10px;
+}
+
+h2 {
+  position: relative;
+  display: inline-block;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #27258d;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+h2:hover::after {
+  width: 60%;
+  left: 20%;
 }
 /* Footer */
 footer {

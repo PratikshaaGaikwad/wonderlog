@@ -1,4 +1,3 @@
-// These elements only exist on SOME pages — that's expected and fine
 const form = document.getElementById('trip-form');
 const tripsContainer = document.getElementById('trips-container');
 const startBtn = document.querySelector('.hero .cta');
@@ -118,7 +117,7 @@ function renderTrips() {
   if (!tripsContainer) return;
 
   if (tripsHeading) {
-    tripsHeading.textContent = `Journal Entries ✈️ (${trips.length})`;
+    tripsHeading.textContent = `Journey Log ✈️ (${trips.length})`;
   }
 
   const visibleTrips = getVisibleTrips();
