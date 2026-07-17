@@ -18,6 +18,9 @@ body {
     display: flex;
     flex-direction: column;   
 }
+html{
+    scroll-behavior:smooth;
+}
 /* Headings */
 h1,
 h2,
@@ -27,6 +30,16 @@ h3 {
 /* Main content wrapper */
 main {
     flex: 1;    /* NEW: grows to fill leftover space, pushing footer down */
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 /* Header */
 header {
@@ -43,7 +56,7 @@ header {
   align-items: center;
   gap: 2px;
   text-decoration: none;
-  color: #376434;
+  color: #23433D;
   font-size: 34px;
   font-weight: bold;
   font-family: "Fraunces", serif;
@@ -73,14 +86,52 @@ nav a {
 }
 
 nav a:hover {
-    color: #3d8d1b;
+    color: #b38a22;
+}
+/* Destination title */
+.page-title {
+  max-width: 700px;
+  margin: 60px auto 40px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.page-title h1 {
+  font-size: 40px;
+  color: #233142;
+  margin-bottom: 15px;
+}
+
+.page-title p {
+  font-size: 17px;
+  color: #52616B;
 }
 /* Hero Section */
 .hero {
-    max-width: 700px;
-    margin: 80px auto;
+    position: relative;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
     padding: 0 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('hero-bg.jpg') center/cover no-repeat;
+    overflow: hidden;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(46, 64, 86, 0.55) 0%, rgba(57, 60, 41, 0.75) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
 }
 .hero h1 {
     font-size: 52px;
@@ -90,17 +141,17 @@ nav a:hover {
 }
 .hero p {
     font-size: 18px;
-    color: #52616B;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 30px;
-     transition: color 0.3s ease;
+    transition: color 0.3s ease;
 }
 .hero:hover p {
-  color: #2a8853;
+  color: #a8d5c2;
 }
 /* Button */
 .cta {
     display: inline-block;
-    background: #2a8853;
+    background: #e98f4b;
     color: white;
     text-decoration: none;
     padding: 14px 32px;
@@ -111,7 +162,7 @@ nav a:hover {
     transition: all 0.3s ease;
 }
 .cta:hover {
-    background: #4A90E2;
+    background: #a5ba3b;
     transform: translateY(-3px);
 }
 /* Trip List */
@@ -285,9 +336,6 @@ transform:scale(1.08);
   cursor: pointer;
 }
 
-.small-hero {
-  margin-bottom: 20px !important;
-}
 
 .journal-section {
   max-width: 900px;
@@ -320,6 +368,133 @@ h2:hover::after {
   width: 60%;
   left: 20%;
 }
+/* About Section */
+
+.about-section{
+    max-width:1200px;
+    margin:90px auto;
+    padding:0 25px;
+}
+
+.about-panel{
+
+    display:flex;
+    align-items:center;
+    gap:60px;
+
+    margin-bottom:90px;
+
+    background:rgb(255, 255, 255);
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+    transition:.35s ease;
+
+}
+
+.about-panel:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+
+}
+.about-panel img{
+
+    width:45%;
+
+    height:340px;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.about-panel:hover img{
+
+    transform:scale(1.06);
+
+}
+.about-text{
+
+    flex:1;
+
+    padding:45px;
+
+}
+
+.about-text h2{
+
+    font-size:2.2rem;
+
+    color:#23433D;
+
+    margin-bottom:18px;
+
+}
+
+.about-text p{
+
+    font-size:17px;
+
+    line-height:1.9;
+
+    color:#5F6C68;
+
+}
+.about-panel.reverse{
+
+    flex-direction:row-reverse;
+
+}
+@media(max-width:850px){
+
+.about-panel,
+.about-panel.reverse{
+
+flex-direction:column;
+
+}
+
+.about-panel img{
+
+width:100%;
+
+height:260px;
+
+}
+
+.about-text{
+
+text-align:center;
+
+padding:35px;
+
+}
+
+}
+.about-text h2::after{
+
+content:"";
+
+display:block;
+
+width:70px;
+
+height:4px;
+
+margin-top:12px;
+
+background:#d59a48;
+
+border-radius:50px;
+
+}
 /* Footer */
 footer {
     text-align: center;
@@ -338,10 +513,7 @@ footer {
     nav ul {
         gap: 15px;
     }
-    .hero {
-        margin: 60px auto;
-    }
-
+  
     .hero h1 {
         font-size: 36px;
     }

@@ -197,5 +197,19 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
 
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+initScrollAnimations();
+renderTrips();
 renderTrips();
