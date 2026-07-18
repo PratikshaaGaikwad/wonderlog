@@ -3,10 +3,13 @@ const tripsContainer = document.getElementById('trips-container');
 const startBtn = document.querySelector('.hero .cta');
 const addTripSection = document.getElementById('add-trip');
 const submitBtn = document.getElementById('submit-btn');
+const cancelBtn = document.getElementById('cancel-btn');
 const searchInput = document.getElementById('searchInput');
 const sortSelect = document.getElementById('sortSelect');
 const tripsHeading = document.getElementById('trips-heading');
-
+const coverImageInput = document.getElementById('coverImage');
+const imagePreview = document.getElementById('image-preview');
+let currentImageData = '';
 let trips = JSON.parse(localStorage.getItem('trips')) || [];
 
 // ---------- Hero "Start Your Journey" button (index.html only) ----------
@@ -15,6 +18,37 @@ if (startBtn && addTripSection) {
     e.preventDefault();
     addTripSection.classList.add('visible');
     addTripSection.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+if (cancelBtn) {
+  cancelBtn.addEventListener('click', function () {
+    exitEditMode();
+  });
+}
+function exitEditMode() {
+  delete form.dataset.editingId;
+  form.reset();
+  currentImageData = '';
+  imagePreview.style.display = 'none';
+  submitBtn.textContent = 'Add Trip';
+  cancelBtn.style.display = 'none';
+}
+//---------- Cover image preview (index.html only) ----------  
+if (coverImageInput) {
+  coverImageInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      currentImageData = reader.result;
+      imagePreview.src = currentImageData;
+      imagePreview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
   });
 }
 
@@ -29,10 +63,16 @@ if (form) {
       document.getElementById('destination').value = trip.destination;
       document.getElementById('date').value = trip.date;
       document.getElementById('notes').value = trip.notes;
-      document.getElementById('coverImage').value = trip.coverImage;
+      if (trip.coverImage) {
+  currentImageData = trip.coverImage;
+  imagePreview.src = trip.coverImage;
+  imagePreview.style.display = 'block';
+}
       form.dataset.editingId = trip.id;
       if (submitBtn) submitBtn.textContent = 'Update Trip';
+      if (cancelBtn) cancelBtn.style.display = 'inline-block';
       addTripSection.classList.add('visible');
+      addTripSection.scrollIntoView({ behavior: 'smooth' });
     }
   }
 }
@@ -46,8 +86,7 @@ if (form) {
     const destination = document.getElementById('destination').value.trim();
     const date = document.getElementById('date').value;
     const notes = document.getElementById('notes').value.trim();
-    const coverImage = document.getElementById('coverImage').value.trim();
-
+    const coverImage = currentImageData;
     if (!title || !destination || !date) {
       alert('Please fill in title, destination, and date.');
       return;
@@ -61,7 +100,9 @@ if (form) {
       trip.destination = destination;
       trip.date = date;
       trip.notes = notes;
+    if (coverImage) {
       trip.coverImage = coverImage;
+}
       delete form.dataset.editingId;
       showToast('✏️ Trip updated.');
     } else {
@@ -69,10 +110,9 @@ if (form) {
       showToast('✅ Trip added successfully!');
     }
 
-    if (submitBtn) submitBtn.textContent = 'Add Trip';
-    saveTrips();
-    renderTrips();
-    form.reset();
+   saveTrips();
+renderTrips();
+exitEditMode();
 
     if (window.location.search.includes('edit=')) {
       window.history.replaceState({}, '', 'index.html'); // clean the URL
@@ -177,9 +217,14 @@ if (tripsContainer) {
         document.getElementById('destination').value = trip.destination;
         document.getElementById('date').value = trip.date;
         document.getElementById('notes').value = trip.notes;
-        document.getElementById('coverImage').value = trip.coverImage;
+        if (trip.coverImage) {
+  currentImageData = trip.coverImage;
+  imagePreview.src = trip.coverImage;
+  imagePreview.style.display = 'block';
+}
         form.dataset.editingId = id;
         if (submitBtn) submitBtn.textContent = 'Update Trip';
+        if (cancelBtn) cancelBtn.style.display = 'inline-block';
         addTripSection.classList.add('visible');
         addTripSection.scrollIntoView({ behavior: 'smooth' });
       } else {
@@ -211,5 +256,4 @@ function initScrollAnimations() {
 }
 
 initScrollAnimations();
-renderTrips();
 renderTrips();

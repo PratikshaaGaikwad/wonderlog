@@ -217,6 +217,14 @@ nav a:hover {
   border-color: #2A8853;
   box-shadow: 0 0 0 4px rgba(42, 136, 83, 0.15);
 }
+.image-preview {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #DDE8E1;
+}
 .trip-card h3 {
   color: #eb6b2b;
   font-family: "Fraunces", serif;
@@ -289,6 +297,26 @@ transform:scale(1.08);
 .delete-btn {
   background: #E24A4A;
   color: white;
+}
+.cancel-btn {
+  display: inline-block;
+  background: #52616B;
+  color: white;
+  text-decoration: none;
+  padding: 14px 32px;
+  font-family: "Space Mono", monospace;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background: #E24A4A;
+  transform: translateY(-3px);
 }
 .toast {
   position: fixed;
