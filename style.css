@@ -148,6 +148,39 @@ nav a:hover {
 .hero:hover p {
   color: #a8d5c2;
 }
+/*destination button to add trip*/
+.page-actions {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.add-trip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  color: #2a8853;
+  text-decoration: none;
+  padding: 8px 18px;
+  font-family: "Space Mono", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1.5px solid #2a8853;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.add-trip-link:hover {
+  background: #2a8853;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.page-actions {
+  text-align: left;
+  margin-bottom: 20px;
+}
 /* Button */
 .cta {
     display: inline-block;
@@ -316,6 +349,37 @@ transform:scale(1.08);
 
 .cancel-btn:hover {
   background: #E24A4A;
+  transform: translateY(-3px);
+}
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #b6c64a;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-family: "Space Mono", monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.179);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: #dc5358e9;
   transform: translateY(-3px);
 }
 .toast {

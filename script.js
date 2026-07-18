@@ -18,6 +18,7 @@ if (startBtn && addTripSection) {
     e.preventDefault();
     addTripSection.classList.add('visible');
     addTripSection.scrollIntoView({ behavior: 'smooth' });
+     if (cancelBtn) cancelBtn.style.display = 'inline-block';
   });
 }
 if (cancelBtn) {
@@ -32,6 +33,10 @@ function exitEditMode() {
   imagePreview.style.display = 'none';
   submitBtn.textContent = 'Add Trip';
   cancelBtn.style.display = 'none';
+  addTripSection.classList.remove('visible');   // NEW: hide the form section
+  document.getElementById('hero') 
+    ? document.getElementById('hero').scrollIntoView({ behavior: 'smooth' })
+    : window.scrollTo({ top: 0, behavior: 'smooth' });   // NEW: go back to hero/top
 }
 //---------- Cover image preview (index.html only) ----------  
 if (coverImageInput) {
@@ -56,6 +61,7 @@ if (coverImageInput) {
 if (form) {
   const params = new URLSearchParams(window.location.search);
   const editId = params.get('edit');
+  const action = params.get('action');
   if (editId) {
     const trip = trips.find(t => t.id === Number(editId));
     if (trip) {
@@ -74,6 +80,10 @@ if (form) {
       addTripSection.classList.add('visible');
       addTripSection.scrollIntoView({ behavior: 'smooth' });
     }
+  }else if (action === 'add') {          
+    addTripSection.classList.add('visible');
+    addTripSection.scrollIntoView({ behavior: 'smooth' });
+    if (cancelBtn) cancelBtn.style.display = 'inline-block';
   }
 }
 
@@ -114,9 +124,9 @@ if (form) {
 renderTrips();
 exitEditMode();
 
-    if (window.location.search.includes('edit=')) {
-      window.history.replaceState({}, '', 'index.html'); // clean the URL
-    }
+  if (window.location.search.includes('edit=') || window.location.search.includes('action=')) {
+  window.history.replaceState({}, '', 'index.html');
+}
   });
 }
 
@@ -253,6 +263,21 @@ function initScrollAnimations() {
   }, { threshold: 0.15 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+const backToTopBtn = document.getElementById('back-to-top');
+
+if (backToTopBtn) {
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 400) {
+      backToTopBtn.classList.add('show');
+    } else {
+      backToTopBtn.classList.remove('show');
+    }
+  });
+
+  backToTopBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 initScrollAnimations();
