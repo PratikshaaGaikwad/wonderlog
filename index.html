@@ -20,6 +20,7 @@
         <li><a href="#">Home</a></li>
         <li><a href="destinations.html">Destinations</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="profile.html?user=YourName">Profile</a></li>
       </ul>
     </nav>
   </header>
@@ -104,7 +105,16 @@
   </main>
   <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑Back to Top</button>
   <div id="toast" class="toast"></div>
-    
+    <div id="trip-modal" class="modal-overlay">
+  <div class="modal-content">
+    <button id="modal-close" class="modal-close">&times;</button>
+    <img id="modal-image" src="" alt="" style="display: none;" />
+    <h2 id="modal-title"></h2>
+    <p id="modal-destination"></p>
+    <p id="modal-date"></p>
+    <p id="modal-notes"></p>
+  </div>
+</div>
   <footer>
     <p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p>
   </footer>

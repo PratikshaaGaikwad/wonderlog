@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destinations | Wanderlog</title>
+    <title>Traveler Profile | Wanderlog</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,33 +28,17 @@ Wanderlog
 </header>
 <main>
 
-<section class="page-title">
-
-<h1>Your Travel Journal</h1>
-
-<p>
-Every destination tells a story.
-Revisit your adventures and memories.
-</p>
+<section class="profile-header">
+  <div class="profile-avatar">🧭</div>
+  <h1 id="profile-name">Traveler</h1>
+  <p id="profile-bio">Third-year CS student building Wanderlog one week at a time. Always planning the next trip.</p>
 </section>
+
 <section class="journal-section">
-  <h2 id="trips-heading"> Journey Log ✈️ (0)</h2>
-<div class="page-actions">
-  <a href="index.html?action=add" class="add-trip-link">+ Add New Trip</a>
-</div>
-
-  <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="🔍 Search destinations..." />
-    <select id="sortSelect">
-      <option value="date-desc">Newest First</option>
-      <option value="date-asc">Oldest First</option>
-      <option value="title-asc">Title (A–Z)</option>
-      <option value="title-desc">Title (Z–A)</option>
-    </select>
-  </div>
-
-  <div id="trips-container"></div>
+  <h2>Trips (<span id="profile-trip-count">0</span>)</h2>
+  <div id="profile-trips-container"></div>
 </section>
+
 </main>
 <div id="trip-modal" class="modal-overlay">
   <div class="modal-content">
@@ -69,7 +53,6 @@ Revisit your adventures and memories.
 <footer>
 <p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p>
 </footer>
-<div id="toast" class="toast"></div>
 <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑Back to Top</button>
 <script src="script.js"></script>
 </body>

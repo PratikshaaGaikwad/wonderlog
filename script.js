@@ -9,9 +9,41 @@ const sortSelect = document.getElementById('sortSelect');
 const tripsHeading = document.getElementById('trips-heading');
 const coverImageInput = document.getElementById('coverImage');
 const imagePreview = document.getElementById('image-preview');
+const tripModal = document.getElementById('trip-modal');
+const modalClose = document.getElementById('modal-close');
 let currentImageData = '';
 let trips = JSON.parse(localStorage.getItem('trips')) || [];
+// ---------- Modal logic (destinations.html only) ----------
+function openTripModal(trip) {
+  document.getElementById('modal-title').textContent = trip.title;
+  document.getElementById('modal-destination').textContent = `📍 ${trip.destination}`;
+  document.getElementById('modal-date').textContent = `📅 ${formatDate(trip.date)}`;
+  document.getElementById('modal-notes').textContent = trip.notes || 'No notes added.';
 
+  const modalImage = document.getElementById('modal-image');
+  if (trip.coverImage) {
+    modalImage.src = trip.coverImage;
+    modalImage.style.display = 'block';
+  } else {
+    modalImage.style.display = 'none';
+  }
+
+  tripModal.classList.add('show');
+}
+
+if (modalClose) {
+  modalClose.addEventListener('click', function () {
+    tripModal.classList.remove('show');
+  });
+}
+
+if (tripModal) {
+  tripModal.addEventListener('click', function (e) {
+    if (e.target === tripModal) {   // clicked the dark overlay, not the content box
+      tripModal.classList.remove('show');
+    }
+  });
+}
 // ---------- Hero "Start Your Journey" button (index.html only) ----------
 if (startBtn && addTripSection) {
   startBtn.addEventListener('click', function (e) {
@@ -204,9 +236,17 @@ function renderTrips() {
 if (searchInput) searchInput.addEventListener('input', renderTrips);
 if (sortSelect) sortSelect.addEventListener('change', renderTrips);
 
-// ---------- Edit / Delete (event delegation, works on whichever page has the grid) ----------
+// ---------- Edit / Delete /click on trip(event delegation, works on whichever page has the grid) ----------
 if (tripsContainer) {
   tripsContainer.addEventListener('click', function (e) {
+    // NEW: open detail modal if the card itself was clicked (not a button)
+  if (e.target.closest('.trip-card') && !e.target.closest('button')) {
+    const card = e.target.closest('.trip-card');
+    const id = Number(card.querySelector('.edit-btn').dataset.id);
+    const trip = trips.find(t => t.id === id);
+    if (trip) openTripModal(trip);
+    return; 
+  }
     if (e.target.classList.contains('delete-btn')) {
       const id = Number(e.target.dataset.id);
       const confirmDelete = confirm('Delete this trip permanently? This action cannot be undone.');
@@ -252,6 +292,35 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
+// ---------- Public Profile Page (profile.html only) ----------
+const profileTripsContainer = document.getElementById('profile-trips-container');
+
+if (profileTripsContainer) {
+  const params = new URLSearchParams(window.location.search);
+  const username = params.get('user') || 'Traveler';
+
+  document.getElementById('profile-name').textContent = username;
+  document.getElementById('profile-trip-count').textContent = trips.length;
+
+  if (trips.length === 0) {
+    profileTripsContainer.innerHTML = '<p class="empty-state">🗺️ This traveler hasn\'t logged any trips yet.</p>';
+  } else {
+    trips.forEach(trip => {
+      const card = document.createElement('div');
+      card.classList.add('trip-card', 'fade-in');
+      card.innerHTML = `
+        ${trip.coverImage
+          ? `<img src="${trip.coverImage}" alt="${trip.title}" onerror="this.style.display='none'" />`
+          : ''}
+        <h3>${trip.title}</h3>
+        <p class="trip-destination">📍 ${trip.destination}</p>
+        <p class="trip-date">📅 ${formatDate(trip.date)}</p>
+        <p class="trip-notes">${trip.notes}</p>
+      `;
+      profileTripsContainer.appendChild(card);
+    });
+  }
+}
 function initScrollAnimations() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -265,7 +334,6 @@ function initScrollAnimations() {
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 }
 const backToTopBtn = document.getElementById('back-to-top');
-
 if (backToTopBtn) {
   window.addEventListener('scroll', function () {
     if (window.scrollY > 400) {
