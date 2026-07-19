@@ -4,121 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wanderlog — Your Travel Journal</title>
-  <meta name="description" content="Wanderlog is a simple place to record your travels — routes, meals, and moments worth remembering." />
-
+  <meta name="description" content="Wanderlog is a personal atlas for routes, meals, and moments worth remembering." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Work+Sans:wght@400;500&family=Space+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <header>
-    <a href="#" class="logo"><img src="logo.png" alt="Wanderlog logo" class="logo-img" />Wanderlog</a>
-
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="destinations.html">Destinations</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="profile.html" class="profile-nav-link">Profile</a></li>
-      </ul>
-    </nav>
+    <a href="index.html" class="logo"><img src="logo.png" alt="Wanderlog logo" class="logo-img" />Wanderlog</a>
+    <nav aria-label="Main navigation"><ul><li><a href="index.html">Home</a></li><li><a href="destinations.html">Destinations</a></li><li><a href="#about">About</a></li><li><a href="profile.html" class="profile-nav-link">Profile</a></li></ul></nav>
   </header>
-
   <main>
     <section class="hero" id="hero">
-      <div class="hero-overlay"></div>
-  <div class="hero-content">
-      <h1>Every trip has a story. Write yours.</h1>
-      <p>
-        Capture every destination, every memory, and every adventure in one beautiful travel journal.
-      </p>
-      <a href="#" class="cta">Start Your Journey →</a>
+      <div class="hero-content">
+        <p class="journal-kicker">Volume 01 &nbsp; / &nbsp; A place to remember</p>
+        <h1>Every trip has a story. Write yours.</h1>
+        <p>Capture every destination, every memory, and every adventure in one beautiful travel journal.</p>
+        <a href="#add-trip" class="cta">Start your journal <span aria-hidden="true">→</span></a>
       </div>
     </section>
     <section class="about-section" id="about">
-  <div class="about-panel fade-in">
-    <img src="bgpic1.jpeg" alt="Travel journal with photos and mementos" />
-    <div class="about-text">
-      <h2>Capture Every Journey</h2>
-      <p>Write down the routes, the meals, the little moments — before they fade. Wanderlog turns your travels into a story worth keeping.</p>
-    </div>
-  </div>
-
-  <div class="about-panel fade-in reverse">
-    <img src="worldmap.jpeg" alt="Illustrated world map" />
-    <div class="about-text">
-      <h2>Explore the World</h2>
-      <p>Every trip you log adds another pin to your personal map — a growing record of everywhere you've been.</p>
-    </div>
-  </div>
-
-  <div class="about-panel fade-in">
-    <img src="bgpic2.jpeg" alt="Wall of framed travel posters" />
-    <div class="about-text">
-      <h2>Relive Your Memories</h2>
-      <p>Look back anytime. Your journal grows with you, one destination at a time — ready to revisit whenever you like.</p>
-    </div>
-  </div>
-
-  <div class="about-panel fade-in reverse">
-    <img src="nature.jpg" alt="Scenic nature landscape" />
-    <div class="about-text">
-      <h2>Find Your Next Adventure</h2>
-      <p>Wanderlog isn't just where trips end up — it's where your next one starts. Get inspired, then go write about it.</p>
-    </div>
-  </div>
-</section>
-    <section class="add-trip" id="add-trip">
-  <h2>Add a New Trip</h2>
-  <form id="trip-form">
-    <div class="form-group">
-      <label for="title">Trip Title</label>
-      <input type="text" id="title" name="title" required />
-    </div>
-
-    <div class="form-group">
-      <label for="destination">Destination</label>
-      <input type="text" id="destination" name="destination" required />
-    </div>
-
-    <div class="form-group">
-      <label for="date">Date</label>
-      <input type="date" id="date" name="date" required />
-    </div>
-
-    <div class="form-group">
-      <label for="notes">Notes</label>
-      <textarea id="notes" name="notes"></textarea>
-    </div>
-
-    <div class="form-group">
-  <label for="coverImage">Cover Photo</label>
-  <input type="file" id="coverImage" name="coverImage" accept="image/*" />
-  <img id="image-preview" class="image-preview" alt="Cover preview" style="display: none;" />
-</div>
-
-    <button type="submit" class="cta" id="submit-btn">Add Trip</button>
-    <button type="button" id="cancel-btn" class="cancel-btn" style="display: none;">Cancel</button>
-  </form>
-</section>
+      <div class="journal-intro"><span>From the pages of your passport</span><h2>Keep the places that changed you close.</h2><p>Not just where you went. What you noticed, tasted, felt, and brought home.</p></div>
+      <article class="about-panel fade-in"><img src="bgpic1.jpeg" alt="Travel journal with photos and mementos" /><div class="about-text"><h2>Capture Every Journey</h2><p>Write down the routes, the meals, the little moments — before they fade. Wanderlog turns your travels into a story worth keeping.</p></div></article>
+      <article class="about-panel fade-in reverse"><img src="worldmap.jpeg" alt="Illustrated world map" /><div class="about-text"><h2>Explore the World</h2><p>Every trip you log adds another pin to your personal map — a growing record of everywhere you've been.</p></div></article>
+      <article class="about-panel fade-in"><img src="bgpic2.jpeg" alt="Wall of framed travel posters" /><div class="about-text"><h2>Relive Your Memories</h2><p>Look back anytime. Your journal grows with you, one destination at a time — ready to revisit whenever you like.</p></div></article>
+      <article class="about-panel fade-in reverse"><img src="nature.jpg" alt="Scenic nature landscape" /><div class="about-text"><h2>Find Your Next Adventure</h2><p>Wanderlog isn't just where trips end up — it's where your next one starts. Get inspired, then go write about it.</p></div></article>
+    </section>
+    <section class="add-trip" id="add-trip"><p class="form-kicker">New entry</p><h2>Add a New Trip</h2><form id="trip-form">
+      <div class="form-group"><label for="title">Trip Title</label><input type="text" id="title" name="title" required /></div>
+      <div class="form-group"><label for="destination">Destination</label><input type="text" id="destination" name="destination" required /></div>
+      <div class="form-group"><label for="date">Date</label><input type="date" id="date" name="date" required /></div>
+      <div class="form-group"><label for="notes">Notes</label><textarea id="notes" name="notes"></textarea></div>
+      <div class="form-group"><label for="coverImage">Cover Photo</label><input type="file" id="coverImage" name="coverImage" accept="image/*" /><img id="image-preview" class="image-preview" alt="Cover preview" style="display:none;" /></div>
+      <button type="submit" class="cta" id="submit-btn">Add Trip</button><button type="button" id="cancel-btn" class="cancel-btn" style="display:none;">Cancel</button>
+    </form></section>
   </main>
-  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑Back to Top</button>
-  <div id="toast" class="toast"></div>
-    <div id="trip-modal" class="modal-overlay">
-  <div class="modal-content">
-    <button id="modal-close" class="modal-close">&times;</button>
-    <img id="modal-image" src="" alt="" style="display: none;" />
-    <h2 id="modal-title"></h2>
-    <p id="modal-destination"></p>
-    <p id="modal-date"></p>
-    <p id="modal-notes"></p>
-  </div>
-</div>
-  <footer>
-    <p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p>
-  </footer>
-
-<script src="script.js"> </script>
-</body>
-</html>
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑ Top</button><div id="toast" class="toast" role="status"></div>
+  <div id="trip-modal" class="modal-overlay"><div class="modal-content"><button id="modal-close" class="modal-close" aria-label="Close">&times;</button><img id="modal-image" src="" alt="" style="display:none;" /><h2 id="modal-title"></h2><p id="modal-destination"></p><p id="modal-date"></p><p id="modal-notes"></p></div></div>
+  <footer><p>&copy; 2026 Wanderlog. Explore. Capture. Remember.</p></footer>
+  <script src="script.js"></script>
+</body></html>
