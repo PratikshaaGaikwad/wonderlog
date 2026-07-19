@@ -13,6 +13,15 @@ const tripModal = document.getElementById('trip-modal');
 const modalClose = document.getElementById('modal-close');
 let currentImageData = '';
 let trips = JSON.parse(localStorage.getItem('trips')) || [];
+// ---------- Current logged-in user (simulated, no real auth) ----------
+function getCurrentUser() {
+  let username = localStorage.getItem('currentUser');
+  if (!username) {
+    username = 'pratiksha'; // change this to your name, just once
+    localStorage.setItem('currentUser', username);
+  }
+  return username;
+}
 // ---------- Modal logic (destinations.html only) ----------
 function openTripModal(trip) {
   document.getElementById('modal-title').textContent = trip.title;
@@ -294,12 +303,133 @@ function showToast(message) {
 }
 // ---------- Public Profile Page (profile.html only) ----------
 const profileTripsContainer = document.getElementById('profile-trips-container');
+const profileForm = document.getElementById('profile-form');
+const editProfileBtn = document.getElementById('edit-profile-btn');
+const editProfileSection = document.getElementById('edit-profile-form');
+const profileAvatarInput = document.getElementById('profileAvatarInput');
+const profileAvatarPreview = document.getElementById('profile-avatar-preview');
+let currentAvatarData = '';
+
+function getUsernameFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('user') || getCurrentUser();
+}
+
+function loadProfile() {
+  const username = getUsernameFromURL();
+  const stored = localStorage.getItem(`profile_${username}`);
+  return stored ? JSON.parse(stored) : {
+    name: username === 'guest' ? 'Traveler' : username,
+    bio: "Exploring the world, one trip at a time.",
+    avatar: ''
+  };
+}
+
+function saveProfile(profile) {
+  const username = getUsernameFromURL();
+  localStorage.setItem(`profile_${username}`, JSON.stringify(profile));
+}
+
+function renderProfileHeader() {
+  const profile = loadProfile();
+  document.getElementById('profile-name').textContent = profile.name;
+  document.getElementById('profile-bio').textContent = profile.bio;
+
+  const avatarEl = document.getElementById('profile-avatar');
+  if (avatarEl) {
+    avatarEl.innerHTML = profile.avatar
+      ? `<img src="${profile.avatar}" alt="${profile.name}" />`
+      : '🧭';
+  }
+
+  updateNavAvatar();
+}
+
+function getProfileByUsername(username) {
+  const stored = localStorage.getItem(`profile_${username}`);
+  return stored ? JSON.parse(stored) : {
+    name: username === 'guest' ? 'Traveler' : username,
+    bio: "Exploring the world, one trip at a time.",
+    avatar: ''
+  };
+}
+
+function updateNavAvatar() {
+  const pageParams = new URLSearchParams(window.location.search);
+  const viewingUsername = pageParams.get('user'); // whoever's profile page we're currently on, if any
+
+  document.querySelectorAll('.profile-nav-link').forEach(link => {
+    const username = viewingUsername || getCurrentUser();
+    const profile = getProfileByUsername(username);
+    const initial = profile.name ? profile.name.charAt(0).toUpperCase() : 'T';
+
+    if (profile.avatar) {
+      link.innerHTML = `
+        <span class="nav-profile">
+          <img src="${profile.avatar}" class="nav-avatar" alt="${profile.name}" />
+          <span class="nav-greeting">Hello, ${profile.name} 👋</span>
+        </span>
+      `;
+    } else {
+      link.innerHTML = `
+        <span class="nav-profile">
+          <span class="nav-avatar nav-avatar-fallback">${initial}</span>
+          <span class="nav-greeting">Hello, ${profile.name} 👋</span>
+        </span>
+      `;
+    }
+  });
+}
+if (profileAvatarInput) {
+  profileAvatarInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      currentAvatarData = reader.result;
+      profileAvatarPreview.src = currentAvatarData;
+      profileAvatarPreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+if (editProfileBtn && editProfileSection) {
+  editProfileBtn.addEventListener('click', function () {
+    const profile = loadProfile();
+    document.getElementById('profileNameInput').value = profile.name;
+    document.getElementById('profileBioInput').value = profile.bio;
+    if (profile.avatar) {
+      currentAvatarData = profile.avatar;
+      profileAvatarPreview.src = profile.avatar;
+      profileAvatarPreview.style.display = 'block';
+    }
+    editProfileSection.classList.add('visible');
+    editProfileSection.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+if (profileForm) {
+  profileForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const profile = loadProfile();
+    profile.name = document.getElementById('profileNameInput').value.trim();
+    profile.bio = document.getElementById('profileBioInput').value.trim();
+    if (currentAvatarData) {
+      profile.avatar = currentAvatarData;
+    }
+
+    saveProfile(profile);
+    renderProfileHeader();
+    editProfileSection.classList.remove('visible');
+    showToast('✅ Profile updated!');
+  });
+}
 
 if (profileTripsContainer) {
-  const params = new URLSearchParams(window.location.search);
-  const username = params.get('user') || 'Traveler';
-
-  document.getElementById('profile-name').textContent = username;
+  renderProfileHeader();
   document.getElementById('profile-trip-count').textContent = trips.length;
 
   if (trips.length === 0) {
@@ -321,6 +451,10 @@ if (profileTripsContainer) {
     });
   }
 }
+
+// Update nav avatar on EVERY page (index, destinations, profile)
+updateNavAvatar();
+
 function initScrollAnimations() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -347,6 +481,9 @@ if (backToTopBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+document.querySelectorAll('.profile-nav-link').forEach(link => {
+  link.setAttribute('href', `profile.html?user=${getCurrentUser()}`);
+});
 
 initScrollAnimations();
 renderTrips();
