@@ -1,87 +1,91 @@
-const form = document.getElementById('trip-form');
-const tripsContainer = document.getElementById('trips-container');
-const startBtn = document.querySelector('.hero .cta');
-const addTripSection = document.getElementById('add-trip');
-const submitBtn = document.getElementById('submit-btn');
-const cancelBtn = document.getElementById('cancel-btn');
-const searchInput = document.getElementById('searchInput');
-const sortSelect = document.getElementById('sortSelect');
-const tripsHeading = document.getElementById('trips-heading');
-const coverImageInput = document.getElementById('coverImage');
-const imagePreview = document.getElementById('image-preview');
-const tripModal = document.getElementById('trip-modal');
-const modalClose = document.getElementById('modal-close');
-let currentImageData = '';
-let trips = JSON.parse(localStorage.getItem('trips')) || [];
+const form = document.getElementById("trip-form");
+const tripsContainer = document.getElementById("trips-container");
+const startBtn = document.querySelector(".hero .cta");
+const addTripSection = document.getElementById("add-trip");
+const submitBtn = document.getElementById("submit-btn");
+const cancelBtn = document.getElementById("cancel-btn");
+const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
+const tripsHeading = document.getElementById("trips-heading");
+const coverImageInput = document.getElementById("coverImage");
+const imagePreview = document.getElementById("image-preview");
+const tripModal = document.getElementById("trip-modal");
+const modalClose = document.getElementById("modal-close");
+let currentImageData = "";
+let trips = JSON.parse(localStorage.getItem("trips")) || [];
 // ---------- Current logged-in user (simulated, no real auth) ----------
 function getCurrentUser() {
-  let username = localStorage.getItem('currentUser');
+  let username = localStorage.getItem("currentUser");
   if (!username) {
-    username = 'pratiksha'; // change this to your name, just once
-    localStorage.setItem('currentUser', username);
+    username = "pratiksha"; // change this to your name, just once
+    localStorage.setItem("currentUser", username);
   }
   return username;
 }
 // ---------- Modal logic (destinations.html only) ----------
 function openTripModal(trip) {
-  document.getElementById('modal-title').textContent = trip.title;
-  document.getElementById('modal-destination').textContent = `📍 ${trip.destination}`;
-  document.getElementById('modal-date').textContent = `📅 ${formatDate(trip.date)}`;
-  document.getElementById('modal-notes').textContent = trip.notes || 'No notes added.';
+  document.getElementById("modal-title").textContent = trip.title;
+  document.getElementById("modal-destination").textContent =
+    `📍 ${trip.destination}`;
+  document.getElementById("modal-date").textContent =
+    `📅 ${formatDate(trip.date)}`;
+  document.getElementById("modal-notes").textContent =
+    trip.notes || "No notes added.";
 
-  const modalImage = document.getElementById('modal-image');
+  const modalImage = document.getElementById("modal-image");
   if (trip.coverImage) {
     modalImage.src = trip.coverImage;
-    modalImage.style.display = 'block';
+    modalImage.style.display = "block";
   } else {
-    modalImage.style.display = 'none';
+    modalImage.style.display = "none";
   }
 
-  tripModal.classList.add('show');
+  tripModal.classList.add("show");
 }
 
 if (modalClose) {
-  modalClose.addEventListener('click', function () {
-    tripModal.classList.remove('show');
+  modalClose.addEventListener("click", function () {
+    tripModal.classList.remove("show");
   });
 }
 
 if (tripModal) {
-  tripModal.addEventListener('click', function (e) {
-    if (e.target === tripModal) {   // clicked the dark overlay, not the content box
-      tripModal.classList.remove('show');
+  tripModal.addEventListener("click", function (e) {
+    if (e.target === tripModal) {
+      // clicked the dark overlay, not the content box
+      tripModal.classList.remove("show");
     }
   });
 }
 // ---------- Hero "Start Your Journey" button (index.html only) ----------
 if (startBtn && addTripSection) {
-  startBtn.addEventListener('click', function (e) {
+  startBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    addTripSection.classList.add('visible');
-    addTripSection.scrollIntoView({ behavior: 'smooth' });
-     if (cancelBtn) cancelBtn.style.display = 'inline-block';
+    addTripSection.classList.add("visible");
+    addTripSection.scrollIntoView({ behavior: "smooth" });
+    if (cancelBtn) cancelBtn.style.display = "inline-block";
   });
 }
 if (cancelBtn) {
-  cancelBtn.addEventListener('click', function () {
+  cancelBtn.addEventListener("click", function () {
     exitEditMode();
   });
 }
 function exitEditMode() {
   delete form.dataset.editingId;
   form.reset();
-  currentImageData = '';
-  imagePreview.style.display = 'none';
-  submitBtn.textContent = 'Add Trip';
-  cancelBtn.style.display = 'none';
-  addTripSection.classList.remove('visible');   // NEW: hide the form section
-  document.getElementById('hero') 
-    ? document.getElementById('hero').scrollIntoView({ behavior: 'smooth' })
-    : window.scrollTo({ top: 0, behavior: 'smooth' });   // NEW: go back to hero/top
+  currentImageData = "";
+  imagePreview.style.display = "none";
+  submitBtn.textContent = "Add Trip";
+  cancelBtn.style.display = "none";
+  addTripSection.classList.remove("visible"); // NEW: hide the form section
+  document.getElementById("hero")
+    ? document.getElementById("hero").scrollIntoView({ behavior: "smooth" })
+    : window.scrollTo({ top: 0, behavior: "smooth" }); // NEW: go back to hero/top
 }
-//---------- Cover image preview (index.html only) ----------  
+//---------- Cover image preview (index.html only) ----------
 if (coverImageInput) {
-  coverImageInput.addEventListener('change', function (e) {
+  coverImageInput.addEventListener("change", function (e) {
     const file = e.target.files[0];
 
     if (!file) return;
@@ -91,7 +95,7 @@ if (coverImageInput) {
     reader.onload = function () {
       currentImageData = reader.result;
       imagePreview.src = currentImageData;
-      imagePreview.style.display = 'block';
+      imagePreview.style.display = "block";
     };
 
     reader.readAsDataURL(file);
@@ -101,83 +105,99 @@ if (coverImageInput) {
 // ---------- If arriving from an "Edit" click on destinations.html ----------
 if (form) {
   const params = new URLSearchParams(window.location.search);
-  const editId = params.get('edit');
-  const action = params.get('action');
+  const editId = params.get("edit");
+  const action = params.get("action");
   if (editId) {
-    const trip = trips.find(t => t.id === Number(editId));
+    const trip = trips.find((t) => t.id === Number(editId));
     if (trip) {
-      document.getElementById('title').value = trip.title;
-      document.getElementById('destination').value = trip.destination;
-      document.getElementById('date').value = trip.date;
-      document.getElementById('notes').value = trip.notes;
+      document.getElementById("title").value = trip.title;
+      document.getElementById("destination").value = trip.destination;
+      document.getElementById("date").value = trip.date;
+      document.getElementById("notes").value = trip.notes;
       if (trip.coverImage) {
-  currentImageData = trip.coverImage;
-  imagePreview.src = trip.coverImage;
-  imagePreview.style.display = 'block';
-}
+        currentImageData = trip.coverImage;
+        imagePreview.src = trip.coverImage;
+        imagePreview.style.display = "block";
+      }
       form.dataset.editingId = trip.id;
-      if (submitBtn) submitBtn.textContent = 'Update Trip';
-      if (cancelBtn) cancelBtn.style.display = 'inline-block';
-      addTripSection.classList.add('visible');
-      addTripSection.scrollIntoView({ behavior: 'smooth' });
+      if (submitBtn) submitBtn.textContent = "Update Trip";
+      if (cancelBtn) cancelBtn.style.display = "inline-block";
+      addTripSection.classList.add("visible");
+      addTripSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      showToast("⚠️ That trip couldn't be found — it may have been deleted.");
     }
-  }else if (action === 'add') {          
-    addTripSection.classList.add('visible');
-    addTripSection.scrollIntoView({ behavior: 'smooth' });
-    if (cancelBtn) cancelBtn.style.display = 'inline-block';
+  } else if (action === "add") {
+    addTripSection.classList.add("visible");
+    addTripSection.scrollIntoView({ behavior: "smooth" });
+    if (cancelBtn) cancelBtn.style.display = "inline-block";
   }
 }
 
 // ---------- Form submit: create or update (index.html only) ----------
 if (form) {
-  form.addEventListener('submit', function (e) {
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const title = document.getElementById('title').value.trim();
-    const destination = document.getElementById('destination').value.trim();
-    const date = document.getElementById('date').value;
-    const notes = document.getElementById('notes').value.trim();
+    const title = document.getElementById("title").value.trim();
+    const destination = document.getElementById("destination").value.trim();
+    const date = document.getElementById("date").value;
+    const notes = document.getElementById("notes").value.trim();
     const coverImage = currentImageData;
     if (!title || !destination || !date) {
-      alert('Please fill in title, destination, and date.');
+      showToast("⚠️ Please fill in title, destination, and date.");
       return;
     }
 
     const editingId = form.dataset.editingId;
 
     if (editingId) {
-      const trip = trips.find(t => t.id === Number(editingId));
+      const trip = trips.find((t) => t.id === Number(editingId));
       trip.title = title;
       trip.destination = destination;
       trip.date = date;
       trip.notes = notes;
-    if (coverImage) {
-      trip.coverImage = coverImage;
-}
+      if (coverImage) {
+        trip.coverImage = coverImage;
+      }
       delete form.dataset.editingId;
-      showToast('✏️ Trip updated.');
+      showToast("✏️ Trip updated.");
     } else {
-      trips.push({ id: Date.now(), title, destination, date, notes, coverImage });
-      showToast('✅ Trip added successfully!');
+      trips.push({
+        id: Date.now(),
+        title,
+        destination,
+        date,
+        notes,
+        coverImage,
+      });
+      showToast("✅ Trip added successfully!");
     }
 
-   saveTrips();
-renderTrips();
-exitEditMode();
+    saveTrips();
+    renderTrips();
+    exitEditMode();
 
-  if (window.location.search.includes('edit=') || window.location.search.includes('action=')) {
-  window.history.replaceState({}, '', 'index.html');
-}
+    if (
+      window.location.search.includes("edit=") ||
+      window.location.search.includes("action=")
+    ) {
+      window.history.replaceState({}, "", "index.html");
+    }
   });
 }
 
 function saveTrips() {
-  localStorage.setItem('trips', JSON.stringify(trips));
+  try {
+    localStorage.setItem("trips", JSON.stringify(trips));
+  } catch (err) {
+    showToast("⚠️ Storage full — try removing an old trip or a large photo.");
+  }
 }
 
 function formatDate(dateString) {
-  const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-GB', options);
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-GB", options);
 }
 
 // ---------- Search + Sort logic (destinations.html only, but safe everywhere) ----------
@@ -186,18 +206,23 @@ function getVisibleTrips() {
 
   if (searchInput && searchInput.value.trim()) {
     const query = searchInput.value.trim().toLowerCase();
-    result = result.filter(trip =>
-      trip.title.toLowerCase().includes(query) ||
-      trip.destination.toLowerCase().includes(query)
+    result = result.filter(
+      (trip) =>
+        trip.title.toLowerCase().includes(query) ||
+        trip.destination.toLowerCase().includes(query),
     );
   }
 
   if (sortSelect) {
     const sortBy = sortSelect.value;
-    if (sortBy === 'date-desc') result.sort((a, b) => new Date(b.date) - new Date(a.date));
-    if (sortBy === 'date-asc') result.sort((a, b) => new Date(a.date) - new Date(b.date));
-    if (sortBy === 'title-asc') result.sort((a, b) => a.title.localeCompare(b.title));
-    if (sortBy === 'title-desc') result.sort((a, b) => b.title.localeCompare(a.title));
+    if (sortBy === "date-desc")
+      result.sort((a, b) => new Date(b.date) - new Date(a.date));
+    if (sortBy === "date-asc")
+      result.sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (sortBy === "title-asc")
+      result.sort((a, b) => a.title.localeCompare(b.title));
+    if (sortBy === "title-desc")
+      result.sort((a, b) => b.title.localeCompare(a.title));
   }
 
   return result;
@@ -212,23 +237,25 @@ function renderTrips() {
   }
 
   const visibleTrips = getVisibleTrips();
-  tripsContainer.innerHTML = '';
+  tripsContainer.innerHTML = "";
 
   if (trips.length === 0) {
-    tripsContainer.innerHTML = '<p class="empty-state">🗺️ Your journal is empty — add your first trip to get started!</p>';
+    tripsContainer.innerHTML =
+      '<p class="empty-state">🗺️ Your journal is empty — add your first trip to get started!</p>';
     return;
   }
 
   if (visibleTrips.length === 0) {
-    tripsContainer.innerHTML = '<p class="empty-state">🔍 No trips match your search.</p>';
+    tripsContainer.innerHTML =
+      '<p class="empty-state">🔍 No trips match your search.</p>';
     return;
   }
 
-  visibleTrips.forEach(trip => {
-    const card = document.createElement('div');
-    card.classList.add('trip-card');
+  visibleTrips.forEach((trip) => {
+    const card = document.createElement("div");
+    card.classList.add("trip-card");
     card.innerHTML = `
-      ${trip.coverImage ? `<img src="${trip.coverImage}" alt="${trip.title}" />` : ''}
+      ${trip.coverImage ? `<img src="${trip.coverImage}" alt="${trip.title}" onerror="this.style.display='none'" />` : ""}
       <h3>${trip.title}</h3>
       <p class="trip-destination">📍 ${trip.destination}</p>
       <p class="trip-date">📅 ${formatDate(trip.date)}</p>
@@ -242,50 +269,52 @@ function renderTrips() {
   });
 }
 
-if (searchInput) searchInput.addEventListener('input', renderTrips);
-if (sortSelect) sortSelect.addEventListener('change', renderTrips);
+if (searchInput) searchInput.addEventListener("input", renderTrips);
+if (sortSelect) sortSelect.addEventListener("change", renderTrips);
 
 // ---------- Edit / Delete /click on trip(event delegation, works on whichever page has the grid) ----------
 if (tripsContainer) {
-  tripsContainer.addEventListener('click', function (e) {
+  tripsContainer.addEventListener("click", function (e) {
     // NEW: open detail modal if the card itself was clicked (not a button)
-  if (e.target.closest('.trip-card') && !e.target.closest('button')) {
-    const card = e.target.closest('.trip-card');
-    const id = Number(card.querySelector('.edit-btn').dataset.id);
-    const trip = trips.find(t => t.id === id);
-    if (trip) openTripModal(trip);
-    return; 
-  }
-    if (e.target.classList.contains('delete-btn')) {
+    if (e.target.closest(".trip-card") && !e.target.closest("button")) {
+      const card = e.target.closest(".trip-card");
+      const id = Number(card.querySelector(".edit-btn").dataset.id);
+      const trip = trips.find((t) => t.id === id);
+      if (trip) openTripModal(trip);
+      return;
+    }
+    if (e.target.classList.contains("delete-btn")) {
       const id = Number(e.target.dataset.id);
-      const confirmDelete = confirm('Delete this trip permanently? This action cannot be undone.');
+      const confirmDelete = confirm(
+        "Delete this trip permanently? This action cannot be undone.",
+      );
       if (confirmDelete) {
-        trips = trips.filter(trip => trip.id !== id);
+        trips = trips.filter((trip) => trip.id !== id);
         saveTrips();
         renderTrips();
-        showToast('🗑 Trip removed.');
+        showToast("🗑 Trip removed.");
       }
     }
 
-    if (e.target.classList.contains('edit-btn')) {
+    if (e.target.classList.contains("edit-btn")) {
       const id = Number(e.target.dataset.id);
       if (form) {
         // We're already on the page with the form — edit in place
-        const trip = trips.find(t => t.id === id);
-        document.getElementById('title').value = trip.title;
-        document.getElementById('destination').value = trip.destination;
-        document.getElementById('date').value = trip.date;
-        document.getElementById('notes').value = trip.notes;
+        const trip = trips.find((t) => t.id === id);
+        document.getElementById("title").value = trip.title;
+        document.getElementById("destination").value = trip.destination;
+        document.getElementById("date").value = trip.date;
+        document.getElementById("notes").value = trip.notes;
         if (trip.coverImage) {
-  currentImageData = trip.coverImage;
-  imagePreview.src = trip.coverImage;
-  imagePreview.style.display = 'block';
-}
+          currentImageData = trip.coverImage;
+          imagePreview.src = trip.coverImage;
+          imagePreview.style.display = "block";
+        }
         form.dataset.editingId = id;
-        if (submitBtn) submitBtn.textContent = 'Update Trip';
-        if (cancelBtn) cancelBtn.style.display = 'inline-block';
-        addTripSection.classList.add('visible');
-        addTripSection.scrollIntoView({ behavior: 'smooth' });
+        if (submitBtn) submitBtn.textContent = "Update Trip";
+        if (cancelBtn) cancelBtn.style.display = "inline-block";
+        addTripSection.classList.add("visible");
+        addTripSection.scrollIntoView({ behavior: "smooth" });
       } else {
         // No form on this page (destinations.html) — send to index.html to edit
         window.location.href = `index.html?edit=${id}`;
@@ -295,51 +324,59 @@ if (tripsContainer) {
 }
 
 function showToast(message) {
-  const toast = document.getElementById('toast');
+  const toast = document.getElementById("toast");
   if (!toast) return;
   toast.textContent = message;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
 }
 // ---------- Public Profile Page (profile.html only) ----------
-const profileTripsContainer = document.getElementById('profile-trips-container');
-const profileForm = document.getElementById('profile-form');
-const editProfileBtn = document.getElementById('edit-profile-btn');
-const editProfileSection = document.getElementById('edit-profile-form');
-const profileAvatarInput = document.getElementById('profileAvatarInput');
-const profileAvatarPreview = document.getElementById('profile-avatar-preview');
-let currentAvatarData = '';
+const profileTripsContainer = document.getElementById(
+  "profile-trips-container",
+);
+const profileForm = document.getElementById("profile-form");
+const editProfileBtn = document.getElementById("edit-profile-btn");
+const editProfileSection = document.getElementById("edit-profile-form");
+const profileAvatarInput = document.getElementById("profileAvatarInput");
+const profileAvatarPreview = document.getElementById("profile-avatar-preview");
+let currentAvatarData = "";
 
 function getUsernameFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('user') || getCurrentUser();
+  return params.get("user") || getCurrentUser();
 }
 
 function loadProfile() {
   const username = getUsernameFromURL();
   const stored = localStorage.getItem(`profile_${username}`);
-  return stored ? JSON.parse(stored) : {
-    name: username === 'guest' ? 'Traveler' : username,
-    bio: "Exploring the world, one trip at a time.",
-    avatar: ''
-  };
+  return stored
+    ? JSON.parse(stored)
+    : {
+        name: username === "guest" ? "Traveler" : username,
+        bio: "Exploring the world, one trip at a time.",
+        avatar: "",
+      };
 }
 
 function saveProfile(profile) {
   const username = getUsernameFromURL();
-  localStorage.setItem(`profile_${username}`, JSON.stringify(profile));
+  try {
+    localStorage.setItem(`profile_${username}`, JSON.stringify(profile));
+  } catch (err) {
+    showToast("⚠️ Storage full — try a smaller profile photo.");
+  }
 }
 
 function renderProfileHeader() {
   const profile = loadProfile();
-  document.getElementById('profile-name').textContent = profile.name;
-  document.getElementById('profile-bio').textContent = profile.bio;
+  document.getElementById("profile-name").textContent = profile.name;
+  document.getElementById("profile-bio").textContent = profile.bio;
 
-  const avatarEl = document.getElementById('profile-avatar');
+  const avatarEl = document.getElementById("profile-avatar");
   if (avatarEl) {
     avatarEl.innerHTML = profile.avatar
       ? `<img src="${profile.avatar}" alt="${profile.name}" />`
-      : '🧭';
+      : "🧭";
   }
 
   updateNavAvatar();
@@ -347,21 +384,22 @@ function renderProfileHeader() {
 
 function getProfileByUsername(username) {
   const stored = localStorage.getItem(`profile_${username}`);
-  return stored ? JSON.parse(stored) : {
-    name: username === 'guest' ? 'Traveler' : username,
-    bio: "Exploring the world, one trip at a time.",
-    avatar: ''
-  };
+  return stored
+    ? JSON.parse(stored)
+    : {
+        name: username === "guest" ? "Traveler" : username,
+        bio: "Exploring the world, one trip at a time.",
+        avatar: "",
+      };
 }
-
 function updateNavAvatar() {
   const pageParams = new URLSearchParams(window.location.search);
-  const viewingUsername = pageParams.get('user'); // whoever's profile page we're currently on, if any
+  const viewingUsername = pageParams.get("user"); // whoever's profile page we're currently on, if any
 
-  document.querySelectorAll('.profile-nav-link').forEach(link => {
+  document.querySelectorAll(".profile-nav-link").forEach((link) => {
     const username = viewingUsername || getCurrentUser();
     const profile = getProfileByUsername(username);
-    const initial = profile.name ? profile.name.charAt(0).toUpperCase() : 'T';
+    const initial = profile.name ? profile.name.charAt(0).toUpperCase() : "T";
 
     if (profile.avatar) {
       link.innerHTML = `
@@ -381,7 +419,7 @@ function updateNavAvatar() {
   });
 }
 if (profileAvatarInput) {
-  profileAvatarInput.addEventListener('change', function (e) {
+  profileAvatarInput.addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -389,59 +427,62 @@ if (profileAvatarInput) {
     reader.onload = function () {
       currentAvatarData = reader.result;
       profileAvatarPreview.src = currentAvatarData;
-      profileAvatarPreview.style.display = 'block';
+      profileAvatarPreview.style.display = "block";
     };
     reader.readAsDataURL(file);
   });
 }
 
 if (editProfileBtn && editProfileSection) {
-  editProfileBtn.addEventListener('click', function () {
+  editProfileBtn.addEventListener("click", function () {
     const profile = loadProfile();
-    document.getElementById('profileNameInput').value = profile.name;
-    document.getElementById('profileBioInput').value = profile.bio;
+    document.getElementById("profileNameInput").value = profile.name;
+    document.getElementById("profileBioInput").value = profile.bio;
     if (profile.avatar) {
       currentAvatarData = profile.avatar;
       profileAvatarPreview.src = profile.avatar;
-      profileAvatarPreview.style.display = 'block';
+      profileAvatarPreview.style.display = "block";
     }
-    editProfileSection.classList.add('visible');
-    editProfileSection.scrollIntoView({ behavior: 'smooth' });
+    editProfileSection.classList.add("visible");
+    editProfileSection.scrollIntoView({ behavior: "smooth" });
   });
 }
 
 if (profileForm) {
-  profileForm.addEventListener('submit', function (e) {
+  profileForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const profile = loadProfile();
-    profile.name = document.getElementById('profileNameInput').value.trim();
-    profile.bio = document.getElementById('profileBioInput').value.trim();
+    profile.name = document.getElementById("profileNameInput").value.trim();
+    profile.bio = document.getElementById("profileBioInput").value.trim();
     if (currentAvatarData) {
       profile.avatar = currentAvatarData;
     }
 
     saveProfile(profile);
     renderProfileHeader();
-    editProfileSection.classList.remove('visible');
-    showToast('✅ Profile updated!');
+    editProfileSection.classList.remove("visible");
+    showToast("✅ Profile updated!");
   });
 }
 
 if (profileTripsContainer) {
   renderProfileHeader();
-  document.getElementById('profile-trip-count').textContent = trips.length;
+  document.getElementById("profile-trip-count").textContent = trips.length;
 
   if (trips.length === 0) {
-    profileTripsContainer.innerHTML = '<p class="empty-state">🗺️ This traveler hasn\'t logged any trips yet.</p>';
+    profileTripsContainer.innerHTML =
+      '<p class="empty-state">🗺️ This traveler hasn\'t logged any trips yet.</p>';
   } else {
-    trips.forEach(trip => {
-      const card = document.createElement('div');
-      card.classList.add('trip-card', 'fade-in');
+    trips.forEach((trip) => {
+      const card = document.createElement("div");
+      card.classList.add("trip-card", "fade-in");
       card.innerHTML = `
-        ${trip.coverImage
-          ? `<img src="${trip.coverImage}" alt="${trip.title}" onerror="this.style.display='none'" />`
-          : ''}
+        ${
+          trip.coverImage
+            ? `<img src="${trip.coverImage}" alt="${trip.title}" onerror="this.style.display='none'" />`
+            : ""
+        }
         <h3>${trip.title}</h3>
         <p class="trip-destination">📍 ${trip.destination}</p>
         <p class="trip-date">📅 ${formatDate(trip.date)}</p>
@@ -456,33 +497,36 @@ if (profileTripsContainer) {
 updateNavAvatar();
 
 function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 },
+  );
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
 }
-const backToTopBtn = document.getElementById('back-to-top');
+const backToTopBtn = document.getElementById("back-to-top");
 if (backToTopBtn) {
-  window.addEventListener('scroll', function () {
+  window.addEventListener("scroll", function () {
     if (window.scrollY > 400) {
-      backToTopBtn.classList.add('show');
+      backToTopBtn.classList.add("show");
     } else {
-      backToTopBtn.classList.remove('show');
+      backToTopBtn.classList.remove("show");
     }
   });
 
-  backToTopBtn.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  backToTopBtn.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
-document.querySelectorAll('.profile-nav-link').forEach(link => {
-  link.setAttribute('href', `profile.html?user=${getCurrentUser()}`);
+document.querySelectorAll(".profile-nav-link").forEach((link) => {
+  link.setAttribute("href", `profile.html?user=${getCurrentUser()}`);
 });
 
 initScrollAnimations();
