@@ -2,7 +2,7 @@
 
 Wanderlog is a browser-based travel journal for collecting the small details that make a trip memorable: places, dates, photographs, and notes. Create an entry when you return home, revisit your archive later, and keep your travel stories in one calm, personal space.
 
-> **Live demo:**
+> **Live demo:** https://pratikshaagaikwad.github.io/wonderlog/
 
 ![Wanderlog homepage](web_images/homepage.png)
 
